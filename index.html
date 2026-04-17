@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Dena - Pawna</title>
 
 <style>
@@ -14,90 +16,66 @@ body{
 }
 
 .container{
-  width:420px;
+  width:90%;
+  max-width:500px;
   margin:40px auto;
   background:#1c1c1c;
   padding:20px;
   border-radius:15px;
   box-shadow:0 10px 30px rgba(0,0,0,0.7);
-  animation:fadeIn .6s ease;
-}
-
-@keyframes fadeIn{
-  from{opacity:0;transform:translateY(25px);}
-  to{opacity:1;transform:translateY(0);}
 }
 
 h2{
-  margin-bottom:10px;
-}
-
-input,button{
-  width:90%;
-  padding:10px;
-  margin:5px;
-  border:none;
-  border-radius:8px;
-}
-
-input{
-  background:#333;
-  color:#fff;
-}
-
-button{
-  cursor:pointer;
-  font-weight:bold;
-  transition:.3s;
-}
-
-button:hover{
-  transform:scale(1.05);
-}
-
-.gold{
-  background:linear-gradient(45deg,#d4af37,#ffd700);
-  color:black;
-}
-
-.red{
-  background:#8b0000;
-  color:white;
+  margin-bottom:15px;
 }
 
 table{
   width:100%;
-  margin-top:20px;
   border-collapse:collapse;
+  margin-top:10px;
 }
 
 th{
   background:#111;
   color:#ffd700;
-  padding:10px;
-  animation:headerAnim .7s ease;
-}
-
-@keyframes headerAnim{
-  from{opacity:0;transform:translateY(-10px);}
-  to{opacity:1;transform:translateY(0);}
+  padding:12px;
 }
 
 td{
   background:#222;
-  padding:10px;
+  padding:12px;
+  font-size:15px;
+  transition:0.3s ease;
 }
 
+/* 🔥 FULL ROW HOVER EFFECT */
 tr{
-  animation:rowAnim .4s ease;
+  transition:0.3s ease;
+  cursor:pointer;
 }
 
-@keyframes rowAnim{
-  from{opacity:0;transform:translateX(-15px);}
-  to{opacity:1;transform:translateX(0);}
+tr:hover{
+  transform:scale(1.05);
+  background:#333 !important;
+  box-shadow:0 0 15px rgba(255,215,0,0.3);
 }
 
-.hidden{display:none;}
+/* MOBILE */
+@media (max-width:600px){
+  th,td{
+    font-size:13px;
+    padding:10px;
+  }
+
+  tr:hover{
+    transform:scale(1.02);
+  }
+
+  .container{
+    margin:20px auto;
+    padding:15px;
+  }
+}
 </style>
 </head>
 
@@ -107,144 +85,45 @@ tr{
 
 <h2>Dena - Pawna</h2>
 
-<!-- LOGIN -->
-<div id="loginDiv">
-  <input type="password" id="password" placeholder="Admin password">
-  <button class="gold" onclick="login()">Login as Admin</button>
-  <button onclick="viewOnly()">View as User</button>
-</div>
-
-<!-- ADMIN PANEL -->
-<div id="adminPanel" class="hidden">
-  <h3>Admin Panel</h3>
-  <button class="red" onclick="logout()">Logout</button>
-
-  <input id="name" placeholder="Name">
-  <input id="amount" type="number" placeholder="Amount">
-  <input id="relation" placeholder="Relationship">
-
-  <button class="gold" onclick="addData()">Add</button>
-</div>
-
-<!-- BACK BUTTON -->
-<div id="backBtn" class="hidden">
-  <button onclick="goHome()">⬅ Back</button>
-</div>
-
 <table>
 <thead>
 <tr>
   <th>Name</th>
   <th>Amount</th>
   <th>Relationship</th>
-  <th id="actionHead"></th>
 </tr>
 </thead>
 
-<tbody id="tableBody"></tbody>
+<tbody>
+
+<tr>
+  <td>Dewan Mahmud Mahin</td>
+  <td>1500</td>
+  <td>Cousin</td>
+</tr>
+
+<tr>
+  <td>TBA</td>
+  <td>TBA</td>
+  <td>TBA</td>
+</tr>
+
+<tr>
+  <td>TBA</td>
+  <td>TBA</td>
+  <td>TBA</td>
+</tr>
+
+<tr>
+  <td>TBA</td>
+  <td>TBA</td>
+  <td>TBA</td>
+</tr>
+
+</tbody>
 </table>
 
-<h3>Total: <span id="total">0</span></h3>
-
 </div>
-
-<script>
-
-let data = JSON.parse(localStorage.getItem("moneyData")) || [
-  { name:"Dewan Mahmud Mahin", amount:1500, relation:"Cousin" }
-];
-
-let isAdmin = false;
-
-function save(){
-  localStorage.setItem("moneyData", JSON.stringify(data));
-}
-
-function login(){
-  let pass=document.getElementById("password").value;
-
-  if(pass==="1234"){
-    isAdmin=true;
-    document.getElementById("loginDiv").classList.add("hidden");
-    document.getElementById("adminPanel").classList.remove("hidden");
-    document.getElementById("actionHead").innerText="Action";
-    render();
-  } else alert("Wrong password");
-}
-
-function logout(){
-  isAdmin=false;
-  document.getElementById("loginDiv").classList.remove("hidden");
-  document.getElementById("adminPanel").classList.add("hidden");
-  document.getElementById("actionHead").innerText="";
-  render();
-}
-
-function viewOnly(){
-  isAdmin=false;
-  document.getElementById("loginDiv").classList.add("hidden");
-  document.getElementById("backBtn").classList.remove("hidden");
-  document.getElementById("actionHead").innerText="";
-  render();
-}
-
-function goHome(){
-  document.getElementById("loginDiv").classList.remove("hidden");
-  document.getElementById("backBtn").classList.add("hidden");
-  render();
-}
-
-function addData(){
-  let name=document.getElementById("name").value;
-  let amount=parseFloat(document.getElementById("amount").value);
-  let relation=document.getElementById("relation").value;
-
-  if(!name || !amount || !relation){
-    alert("Fill all fields");
-    return;
-  }
-
-  data.push({name,amount,relation});
-  save();
-
-  document.getElementById("name").value="";
-  document.getElementById("amount").value="";
-  document.getElementById("relation").value="";
-
-  render();
-}
-
-function deleteData(index){
-  data.splice(index,1);
-  save();
-  render();
-}
-
-function render(){
-  let tbody=document.getElementById("tableBody");
-  tbody.innerHTML="";
-
-  let total=0;
-
-  data.forEach((item,index)=>{
-    total+=item.amount;
-
-    tbody.innerHTML+=`
-      <tr>
-        <td>${item.name}</td>
-        <td>${item.amount}</td>
-        <td>${item.relation}</td>
-        ${isAdmin ? `<td><button class="red" onclick="deleteData(${index})">Delete</button></td>` : `<td></td>`}
-      </tr>
-    `;
-  });
-
-  document.getElementById("total").innerText=total;
-}
-
-render();
-
-</script>
 
 </body>
 </html>
